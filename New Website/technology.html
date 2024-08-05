@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TechTrends Today</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet">
+    <style>
+        .comment-box {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .comment-container {
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        .comment {
+            margin-bottom: 20px;
+        }
+        body {
+            font-family: "Lucida Console", "Courier New", monospace;
+            background: rgb(2,0,36);
+            background: linear-gradient(0deg, rgb(235, 235, 241) 0%, rgb(139, 139, 195) 43%, rgba(0,212,255,1) 100%);
+            color: #333;
+        }
+        .navbar-inverse {
+            background-color: #333;
+            border-color: #444;
+        }
+        .navbar-inverse .navbar-brand {
+            font-family: "Lucida Console", "Courier New", monospace;
+			font-weight: bold;
+			font-style: oblique;            color: white;
+            font-size: 24px;
+        }
+        .navbar-inverse .navbar-nav>li>a {
+            color: white;
+        }
+        .navbar-inverse .navbar-nav>li>a:hover {
+            color: #d4af37;
+        }
+        .navbar-inverse .navbar-toggle .icon-bar {
+            background-color: white;
+        }
+        .jumbotron {
+            background: linear-gradient(135deg, #1db8e7, #1041e3);
+            color: white;
+            text-align: center;
+            border-radius: 10px;
+            padding: 50px 20px;
+        }
+        .content-box {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            padding: 20px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .content-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 30px rgba(0, 0, 0, 0.2);
+        }
+        .show-more-btn, .like-button, .comment-button {
+            background-color: #1041e3;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .show-more-btn:hover, .like-button:hover, .comment-button:hover {
+            background-color: #082c93;
+        }
+        .btn-default {
+            background-color: #1041e3;
+            color: white;
+        }
+        .btn-default:hover {
+            background-color: #082c93;
+        }
+        .navbar-default {
+            background-color: #333;
+            border-color: #444;
+        }
+        .navbar-default .navbar-text a {
+            color: white;
+        }
+        .hidden-content {
+            display: none;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+            max-height: 0;
+        }
+        .page-content {
+            display: none;
+        }
+        .active-page {
+            display: block;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+        }
+        .pagination>.active>a,
+        .pagination>.active>a:focus,
+        .pagination>.active>a:hover,
+        .pagination>.active>span,
+        .pagination>.active>span:focus,
+        .pagination>.active>span:hover {
+            background-color: #ff4d4d;
+            border-color: #ff4d4d;
+        }
+        .like-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #007BFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+        }
+        .like-button i {
+            margin-right: 5px;
+        }
+        .like-button:hover {
+            background-color: #0056b3;
+        }
+        .like-count {
+            margin-left: 10px;
+            font-size: 18px;
+            color: #007BFF;
+            font-weight: bold;
+        }
+        input, textarea {
+            color: black;
+        }
+        .button-container {
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .share-button {
+            padding: 10px;
+            margin: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+        }
+        .facebook { background-color: #3b5998; }
+        .twitter { background-color: #1da1f2; }
+        .linkedin { background-color: #0077b5; }
+        .comment-section {
+            margin-top: 20px;
+        }
+        .comment-section input {
+            width: calc(100% - 110px);
+            display: inline-block;
+            margin-right: 10px;
+        }
+        .comment-section button {
+            display: inline-block;
+        }
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-top: 50px;
+        }
+        footer a {
+            color: #d4af37;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
+        }
+        .animated-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .animated-section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .tooltip-custom {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip-custom .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: #555;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* Position above the element */
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip-custom .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%; /* Bottom of the tooltip */
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #555 transparent transparent transparent;
+        }
+        .tooltip-custom:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-inverse navbar-static-top">
+        <div class="container">
+            <a href="#" class="navbar-brand">TechTrends Today</a>
+            <button class="navbar-toggle" data-toggle="collapse" data-target=".navHeaderCollapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <div class="collapse navbar-collapse navHeaderCollapse">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="active"><a href="index.html">Home</a></li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"> Topics <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="technology.html">A.I</a></li>
+                            <li><a href="finance.html">Technology</a></li>
+                            <li><a href="topic3.html">Robotics</a></li>
+                            <li><a href="topic4.html">Finance</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="about.html">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="page-content active-page animated-section" id="page1">
+            <div class="jumbotron">
+                <h1>Welcome to the Artificial Intellegence section!</h1>
+            </div>
+            <div class="jumbotron">
+                <h1>
+                    The Rise of Generative AI and its Impact
+                </h1>
+               
+                <p>
+                    <span class="introContent"></span>
+                    <span>My thoughts on the usage of generative AI</span>
+                </p>
+                <div class="moreContent hidden-content">
+                    <p>
+                        In recent years, generative AI has made significant strides, revolutionizing various sectors from entertainment to healthcare. Generative AI models, such as GPT-4 and DALL-E, are capable of creating human-like text and images, pushing the boundaries of what artificial intelligence can achieve. This technology has found applications in content creation, where it assists in writing articles, generating artwork, and even composing music. Additionally, in the field of healthcare, generative AI is being used to model protein structures and predict drug interactions, speeding up the process of drug discovery.
+                    </p>
+                    <img src="AI.png" alt="Image failed to load..." width="400" height="400">
+                    <p>
+                        The impact of generative AI extends beyond these practical applications. It raises important ethical and societal questions. Issues of copyright, data privacy, and the potential for misuse in creating deepfakes are hot topics in the ongoing debate about AI’s role in society. As generative AI continues to evolve, it is crucial for policymakers, technologists, and ethicists to collaborate in establishing guidelines and frameworks that ensure its responsible use. The future of generative AI holds immense potential, but it must be navigated with caution and foresight to harness its benefits while mitigating its risks.
+                    </p>
+                   
+                </div>
+                <button class="show-more-btn">Show More</button>
+                <button class="like-button" onclick="incrementLikeCount()"><i class="fas fa-thumbs-up"></i> Like</button>
+                <input type="text" id="commentInput1" placeholder="Add a comment">
+                <button class="comment-button" onclick="addComment('commentInput1', 'commentList1')">Add Comment</button>
+                <ul id="commentList1" class="comment-list"></ul>
+            </div>
+            <div class="jumbotron">
+                <h1>The Ethical and Social Implications of AI Surveillance</h1>
+                
+                <p>
+                    <span class="introContent">My thoughts on the usage of AI in the security domain</span>
+                </p>
+                <div class="moreContent hidden-content">
+                    <p>
+                        The integration of artificial intelligence (AI) into surveillance systems has sparked significant debate regarding its ethical and social implications. AI-powered surveillance technologies, such as facial recognition and predictive policing, promise to enhance security and efficiency. However, they also raise concerns about privacy, civil liberties, and potential biases.
+
+                        Facial recognition technology has been widely adopted for various purposes, including security, law enforcement, and commercial applications. While it offers benefits in identifying suspects and preventing crimes, it also poses risks of misidentification and misuse. Instances of biased algorithms disproportionately affecting certain demographic groups have been documented, highlighting the need for transparency and accountability in AI development and deployment.
+                    </p>
+                    <img src="security.png" alt="Image failed to load..." width="400" height="400">
+                    <p>
+                        Predictive policing, which uses AI to analyze data and predict criminal activity, aims to allocate resources more effectively. However, critics argue that it can perpetuate existing biases in the criminal justice system, leading to over-policing in certain communities. The lack of oversight and potential for abuse in AI surveillance systems necessitate robust regulatory frameworks to protect individual rights and ensure ethical practices.
+
+                        As AI surveillance continues to advance, it is imperative to balance technological innovation with ethical considerations. Policymakers, technologists, and civil society must work together to develop guidelines that promote the responsible use of AI while safeguarding privacy and civil liberties. The future of AI surveillance will depend on our ability to navigate these complex challenges and harness its potential for the greater good.
+                    </p>
+                </div>
+                <button class="show-more-btn">Show More</button>
+                <button class="like-button" onclick="incrementLikeCount()"><i class="fas fa-thumbs-up"></i> Like</button>
+                    <input type="text" id="commentInput2" placeholder="Add a comment">
+                    <button class="comment-button" onclick="addComment('commentInput2', 'commentList2')">Add Comment</button>
+                    <ul id="commentList2" class="comment-list"></ul>
+            </div>
+            
+        </div>
+        
+        <div class="page-content animated-section" id="page2">
+            <div class="jumbotron">
+                <h1>Coming Soon...</h1>
+                <p>I am currently in the proccess of writing more articles</p>
+                <p>
+                    <span class="introContent"></span>
+                    <span>Stay tuned for more!!!</span>
+                </p>
+                <div class="moreContent hidden-content">
+              
+                </div>
+                <button class="show-more-btn">Show More</button>
+                <button class="like-button" onclick="incrementLikeCount()"><i class="fas fa-thumbs-up"></i> Like</button>
+                <input type="text" id="commentInput3" placeholder="Add a comment">
+        <button class="comment-button" onclick="addComment('commentInput3', 'commentList3')">Add Comment</button>
+        <ul id="commentList3" class="comment-list"></ul>
+            </div>
+        </div>
+
+        <div class="page-content animated-section" id="page3">
+            <div class="jumbotron">
+                <h1>Coming Soon...</h1>
+                <p>I am currently in the proccess of writing more articles</p>
+                <p>
+                    <span class="introContent"></span>
+                    <span>Stay tuned for more!!!</span>
+                </p>
+                <div class="moreContent hidden-content">
+
+                </div>
+                <button class="show-more-btn">Show More</button>
+                <button class="like-button" onclick="incrementLikeCount()"><i class="fas fa-thumbs-up"></i> Like</button>
+                <input type="text" id="commentInput3" placeholder="Add a comment">
+                <button class="comment-button" onclick="addComment('commentInput3', 'commentList3')">Add Comment</button>
+                <ul id="commentList3"></ul>
+            </div>
+        </div>
+
+        <div class="page-content animated-section" id="page4">
+            <div class="jumbotron">
+                <h1>Coming Soon...</h1>
+                <p>I am currently in the proccess of writing more articles</p>
+                <p>
+                    <span class="introContent"></span>
+                    <span>Stay tuned for more!!!</span>
+                </p>
+                <div class="moreContent hidden-content">
+
+                </div>
+                <button class="show-more-btn">Show More</button>
+                <button class="like-button" onclick="incrementLikeCount()"><i class="fas fa-thumbs-up"></i> Like</button>
+                <input type="text" id="commentInput3" placeholder="Add a comment">
+                <button class="comment-button" onclick="addComment('commentInput3', 'commentList3')">Add Comment</button>
+                <ul id="commentList3"></ul>
+            </div>
+        </div>
+
+        <div class="page-content animated-section" id="page5">
+            <div class="jumbotron">
+                <h1>Coming Soon...</h1>
+                <p>I am currently in the proccess of writing more articles</p>
+                <p>
+                    <span class="introContent"></span>
+                    <span>Stay tuned for more!!!</span>
+                </p>
+                <div class="moreContent hidden-content">
+
+                </div>
+                <button class="show-more-btn">Show More</button>
+                <button class="like-button" onclick="incrementLikeCount()"><i class="fas fa-thumbs-up"></i> Like</button>
+                <input type="text" id="commentInput3" placeholder="Add a comment">
+                <button class="comment-button" onclick="addComment('commentInput3', 'commentList3')">Add Comment</button>
+                <ul id="commentList3"></ul>
+            </div>
+        </div>
+
+        <div class="content-box">
+            <div class="button-container">
+                <div>
+                    <button class="share-button facebook tooltip-custom" onclick="shareOnFacebook()"><i class="fab fa-facebook-f"></i> Share on Facebook
+                        <span class="tooltiptext">Share on Facebook</span>
+                    </button>
+                    <button class="share-button twitter tooltip-custom" onclick="shareOnTwitter()"><i class="fab fa-twitter"></i> Share on Twitter
+                        <span class="tooltiptext">Share on Twitter</span>
+                    </button>
+                    <button class="share-button linkedin tooltip-custom" onclick="shareOnLinkedIn()"><i class="fab fa-linkedin-in"></i> Share on LinkedIn
+                        <span class="tooltiptext">Share on LinkedIn</span>
+                    </button>
+                </div>
+                <div class="like-count"> Total Likes: <span id="like-count">46</span></div>
+            </div>
+        </div>
+
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                <li><a href="#" class="page-link" data-page="1">1</a></li>
+                <li><a href="#" class="page-link" data-page="2">2</a></li>
+                <li><a href="#" class="page-link" data-page="3">3</a></li>
+                <li><a href="#" class="page-link" data-page="4">4</a></li>
+                <li><a href="#" class="page-link" data-page="5">5</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Website built by Kairav Parikh</p>
+            <p><a href="#">Return to Top</a></p>
+            <button class="btn btn-danger" data-toggle="modal" data-target="#contact">Contact Us</button>
+        </div>
+    </footer>
+
+    <div class="modal fade" id="contact" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form class="form-horizontal">
+                    <div class="modal-header">
+                        <h4>Contact Tech Site</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="contact-name" class="col-lg-2 control-label">Name: </label>
+                            <div class="col-lg-10">
+                                <input type="text" class="form-contact" id="contact-name" placeholder="Full Name">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-email" class="col-lg-2 control-label">Email: </label>
+                            <div class="col-lg-10">
+                                <input type="email" class="form-contact" id="contact-email" placeholder="you@example.com">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="contact-message" class="col-lg-2 control-label">Message: </label>
+                            <div class="col-lg-10">
+                                <textarea class="form-control" rows="8"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-default" data-dismiss="modal">Close</a>
+                        <button class="btn btn-primary" type="submit">Send</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('.show-more-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                const moreContent = button.previousElementSibling;
+                if (moreContent.classList.contains('hidden-content')) {
+                    moreContent.classList.remove('hidden-content');
+                    moreContent.classList.add('show-content');
+                    button.textContent = 'Show Less';
+                } else {
+                    moreContent.classList.remove('show-content');
+                    moreContent.classList.add('hidden-content');
+                    button.textContent = 'Show More';
+                }
+            });
+        });
+
+        document.querySelectorAll('.page-link').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const page = this.getAttribute('data-page');
+                document.querySelectorAll('.page-content').forEach(content => {
+                    content.classList.remove('active-page');
+                });
+                document.getElementById('page' + page).classList.add('active-page');
+                document.querySelectorAll('.page-link').forEach(link => {
+                    link.parentElement.classList.remove('active');
+                });
+                this.parentElement.classList.add('active');
+            });
+        });
+
+        function shareOnFacebook() {
+            const url = "https://www.facebook.com/sharer/sharer.php?u=https://www.google.com/maps";
+            window.open(url, '_blank');
+        }
+
+        function shareOnTwitter() {
+            const url = "https://twitter.com/intent/tweet?url=https://www.google.com/maps";
+            window.open(url, '_blank');
+        }
+
+        function shareOnLinkedIn() {
+            const url = "https://www.linkedin.com/sharing/share-offsite/?url=https://www.google.com/maps";
+            window.open(url, '_blank');
+        }
+
+        let likeCount = 46;
+
+        function incrementLikeCount() {
+            likeCount++;
+            document.getElementById('like-count').textContent = likeCount;
+            button.classList.add('green-button');
+        }
+
+        function addComment(inputId, listId) {
+            const comment = document.getElementById(inputId).value;
+            if (comment.trim() !== "") {
+                const li = document.createElement("li");
+                const textNode = document.createTextNode(comment);
+                li.appendChild(textNode);
+                document.getElementById(listId).appendChild(li);
+                document.getElementById(inputId).value = "";
+            }
+        }
+        function addPrebuiltComments(listId, comments) {
+            var listElement = document.getElementById(listId);
+            comments.forEach(function(comment) {
+                var listItem = document.createElement("li");
+                listItem.textContent = comment;
+                listElement.appendChild(listItem);
+            });
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var prebuiltCommentsSections = {
+                "commentList1": [
+                    "This is a prebuilt comment 1 for section 1.",
+                    "This is a prebuilt comment 2 for section 1."
+                ],
+                "commentList2": [
+                    "This is a prebuilt comment 1 for section 2.",
+                    "This is a prebuilt comment 2 for section 2."
+                ],
+                "commentList3": [
+                    "This is a prebuilt comment 1 for section 3.",
+                    "This is a prebuilt comment 2 for section 3."
+                ]
+            };
+
+            for (var listId in prebuiltCommentsSections) {
+                addPrebuiltComments(listId, prebuiltCommentsSections[listId]);
+            }
+        });
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.animated-section').forEach(section => {
+            observer.observe(section);
+        });
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</body>
+</html>
